@@ -5,6 +5,7 @@ carefully researched and put together by experts in mental health training and p
 From inside the app, via two endpoints, the users can get the content of the articles.
 
 GET mongodb/                  get all avaiable articles
+
 GET mongodb/{article_ID}      get a specific article
 
 The App uses flask to create an API and uses mongoDB as a storage solution for the articles. 
