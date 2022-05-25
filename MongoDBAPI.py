@@ -23,7 +23,7 @@ class MongoAPI:
         self.collection = db[collection]
 
     def read(self):
-        log.info('Reading all Articles')
+        log.info('Reading all articles')
         documents = self.collection.find()
         output = [{item: data[item] for item in data if item != '_id'} for data in documents]
         return output
