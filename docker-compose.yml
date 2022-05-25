@@ -2,7 +2,11 @@ version: "3"
 services: 
     mymongo_wiki:
         image: "mongo"
-    
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: admin
+            MONGO_INITDB_ROOT_PASSWORD: test123
+            MONGO_INITDB_DATABASE: mindtasticWiki
+
     myreader:
         build: .
         volumes:

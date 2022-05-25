@@ -1,3 +1,6 @@
+from urllib.parse import quote_plus
+
+from bson import ObjectId
 from flask import Flask, request, json, Response
 from pymongo import MongoClient
 import logging as log
@@ -7,14 +10,17 @@ app = Flask(__name__)
 
 
 class MongoAPI:
-    def __init__(self, data):
-        log.basicConfig(level=log.DEBUG, format='%(asctime)s %(levelname)s:\n%(message)s\n')
-        self.client = MongoClient("mongodb://mymongo_1:27017/")
-        database = data['database']
-        collection = data['collection']
-        cursor = self.client[database]
-        self.collection = cursor[collection]
-        self.data = data
+    def __init__(self, ):
+        # sets up database client
+        uri = "mongodb://%s:%s@%s" % (quote_plus("admin"), quote_plus("test123"), "mymongo_wiki")
+        self.client = MongoClient(uri)
+        database = "mindtasticWiki"
+        collection = "articles"
+        db = self.client[database]
+        # creates collection in wiki database
+        if collection not in db.list_collection_names():
+            db.create_collection(collection)
+        self.collection = db[collection]
 
     def read(self):
         log.info('Reading All Articles')
@@ -23,18 +29,17 @@ class MongoAPI:
         return output
 
     def write(self, data):
-        log.info('Writing Article')
-        new_document = data['Document']
-        response = self.collection.insert_one(new_document)
+        log.info('Writing one article')
+        response = self.collection.insert_one({"title": data["title"], "content": data["content"]})
         output = {'Status': 'Successfully Inserted',
                   'Document_ID': str(response.inserted_id)}
         return output
 
-    def delete(self, data):
-        log.info('Deleting Article')
-        response = self.collection.delete_one({"articleID": data["articleID"]})
-        output = {'Status': 'Successfully Deleted',
-                  'DeletedCount': str(response.deleted_count)}
+    def delete(self, articleID):
+        log.info('Deleting one article')
+        response = self.collection.delete_one({"_id": ObjectId(articleID)})
+        output = {'DeletedCount': str(response.deleted_count)}
+        output["success"] = response.deleted_count == 1
         return output
 
 
@@ -47,13 +52,8 @@ def base():
 
 @app.route('/wiki', methods=['GET'])
 def wiki_readAllArticles():
-    data = request.json
-    if data is None or data == {}:
-        return Response(response=json.dumps({"Error": "Please provide database name and collection"}),
-                        status=HTTPStatus.BAD_REQUEST,
-                        mimetype='application/json')
-    obj1 = MongoAPI(data)
-    response = obj1.read()
+    db = MongoAPI()
+    response = db.read()
     return Response(response=json.dumps(response),
                     status=HTTPStatus.OK,
                     mimetype='application/json')
@@ -62,24 +62,27 @@ def wiki_readAllArticles():
 @app.route('/wiki', methods=['POST'])
 def wiki_createArticle():
     data = request.json
-    if data is None or data == {} or 'Document' not in data:
-        return Response(response=json.dumps({"Error": "Please provide article information"}),
+    # expects "title" and "content" field in body
+    if 'title' not in data or 'content' not in data:
+        return Response(response=json.dumps({"Error": "Please provide article information (title and content)"}),
+
                         status=HTTPStatus.BAD_REQUEST,
                         mimetype='application/json')
-    obj1 = MongoAPI(data)
-    response = obj1.write(data)
+    db = MongoAPI()
+    response = db.write(data)
     return Response(response=json.dumps(response),
-                    status=HTTPStatus.OK,
+                    status=HTTPStatus.CREATED,
                     mimetype='application/json')
 
 
 @app.route('/wiki/<articleID>', methods=['DELETE'])
 def wiki_deleteArticle(articleID):
-    return Response(response=json.dumps({"Error": "Please provide Wiki Article ID"}),
+    db = MongoAPI()
+    response = db.delete(articleID)
+    return Response(response=json.dumps(response),
                     status=HTTPStatus.OK,
                     mimetype='application/json')
 
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001, host='0.0.0.0')
-
