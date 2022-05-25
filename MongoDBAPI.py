@@ -76,8 +76,8 @@ def wiki_createArticle():
 
 @app.route('/wiki/<articleID>', methods=['DELETE'])
 def wiki_deleteArticle(articleID):
-    obj1 = MongoAPI()
-    response = obj1.delete(articleID)
+    db = MongoAPI()
+    response = db.delete(articleID)
     return Response(response=json.dumps(response),
                     status=HTTPStatus.OK,
                     mimetype='application/json')
