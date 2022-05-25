@@ -23,7 +23,7 @@ class MongoAPI:
         self.collection = db[collection]
 
     def read(self):
-        log.info('Reading all articles')
+        log.info('Reading All Articles')
         documents = self.collection.find()
         output = [{item: data[item] for item in data if item != '_id'} for data in documents]
         return output
@@ -65,6 +65,7 @@ def wiki_createArticle():
     # expects "title" and "content" field in body
     if 'title' not in data or 'content' not in data:
         return Response(response=json.dumps({"Error": "Please provide article information (title and content)"}),
+
                         status=HTTPStatus.BAD_REQUEST,
                         mimetype='application/json')
     db = MongoAPI()

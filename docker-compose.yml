@@ -9,6 +9,8 @@ services:
 
     myreader:
         build: .
+        volumes:
+          - .:/app
         depends_on: 
             - mymongo_wiki
         ports:
