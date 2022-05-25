@@ -39,10 +39,7 @@ class MongoAPI:
         log.info('Deleting one article')
         response = self.collection.delete_one({"_id": ObjectId(articleID)})
         output = {'DeletedCount': str(response.deleted_count)}
-        if response.deleted_count == 1:
-            output["Status"] = 'Successfully Deleted'
-        else:
-            output["Status"] = 'Could not delete object'
+        output["success"] = response.deleted_count == 1
         return output
 
 
