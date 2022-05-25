@@ -70,7 +70,7 @@ def wiki_createArticle():
     db = MongoAPI()
     response = db.write(data)
     return Response(response=json.dumps(response),
-                    status=HTTPStatus.OK,
+                    status=HTTPStatus.CREATED,
                     mimetype='application/json')
 
 
