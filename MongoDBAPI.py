@@ -36,7 +36,7 @@ class MongoAPI:
         return output
 
     def delete(self, articleID):
-        log.info('Deleting one Article')
+        log.info('Deleting one article')
         response = self.collection.delete_one({"_id": ObjectId(articleID)})
         output = {'DeletedCount': str(response.deleted_count)}
         if response.deleted_count == 1:
