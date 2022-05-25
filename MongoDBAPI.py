@@ -52,8 +52,8 @@ def base():
 
 @app.route('/wiki', methods=['GET'])
 def wiki_readAllArticles():
-    obj1 = MongoAPI()
-    response = obj1.read()
+    db = MongoAPI()
+    response = db.read()
     return Response(response=json.dumps(response),
                     status=HTTPStatus.OK,
                     mimetype='application/json')
