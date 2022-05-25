@@ -67,8 +67,8 @@ def wiki_createArticle():
         return Response(response=json.dumps({"Error": "Please provide article information (title and content)"}),
                         status=HTTPStatus.BAD_REQUEST,
                         mimetype='application/json')
-    obj1 = MongoAPI()
-    response = obj1.write(data)
+    db = MongoAPI()
+    response = db.write(data)
     return Response(response=json.dumps(response),
                     status=HTTPStatus.OK,
                     mimetype='application/json')
