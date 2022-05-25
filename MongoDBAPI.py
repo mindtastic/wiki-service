@@ -29,7 +29,7 @@ class MongoAPI:
         return output
 
     def write(self, data):
-        log.info('Writing one Article')
+        log.info('Writing one article')
         response = self.collection.insert_one({"title": data["title"], "content": data["content"]})
         output = {'Status': 'Successfully Inserted',
                   'Document_ID': str(response.inserted_id)}
