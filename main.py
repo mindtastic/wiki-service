@@ -6,6 +6,7 @@ from fastapi import FastAPI
 import logging as log
 from pydantic import ValidationError
 from wikiEntry import wikiEntry
+from os import getenv
 
 wiki = FastAPI()
 
@@ -13,7 +14,10 @@ wiki = FastAPI()
 class MongoAPI:
     def __init__(self, ):
         # sets up database client
-        uri = "mongodb://%s:%s@%s" % (quote_plus("admin"), quote_plus("test123"), "mymongo_wiki")
+        user = getenv('MONGODB_USER', "admin")
+        password = getenv('MONGODB_PASSWORD', "test123")
+        databaseName = getenv('MONGODB_NAME', "mymongo_wiki")
+        uri = "mongodb://%s:%s@%s" % (quote_plus(user), quote_plus(password), databaseName)
         self.client = MongoClient(uri)
         database = "mindtasticWiki"
         collection = "articles"
