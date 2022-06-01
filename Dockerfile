@@ -8,12 +8,11 @@ WORKDIR /app
 COPY /requirements.txt /app
 
 RUN pip3 install -r requirements.txt
+RUN pip install fastapi uvicorn
 
-COPY ["MongoDBAPI.py", "/app"]
+COPY ["main.py", "/app"]
 
 # Exposing an internal port
 EXPOSE 5001
 
-# default commands
-ENTRYPOINT [ "python3" ]
-CMD ["MongoDBAPI.py"]
+CMD [ "uvicorn", "main:wiki", "--host", "0.0.0.0", "--port", "5001"]
