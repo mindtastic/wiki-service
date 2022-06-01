@@ -11,6 +11,7 @@ RUN pip3 install -r requirements.txt
 RUN pip install fastapi uvicorn
 
 COPY ["main.py", "/app"]
+COPY ["wikiEntry.py", "/app"]
 
 # Exposing an internal port
 EXPOSE 5001
