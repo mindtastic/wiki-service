@@ -28,7 +28,6 @@ class MongoAPI:
         documents = self.collection.find()
         articles = []
         for article in documents:
-            print(article)
             articles.append({
                 "id": str(article["_id"]),
                 "title": article["title"],

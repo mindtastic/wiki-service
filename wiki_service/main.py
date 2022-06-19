@@ -45,7 +45,6 @@ async def wiki_storeArticles(JSONentries: Union[List, Dict, Any] = None):
             )
         except ValueError as ve:
             log.info(ve)
-            print(ve)
             return {"status_code": HTTPStatus.BAD_REQUEST,
                     "success": False,
                     "article": "Error in article: {}".format(entry.get("title")),
