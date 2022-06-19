@@ -51,6 +51,8 @@ class MongoAPI:
         # --> admins can just send one json object to this endpoint, which
         # is updated from time to time
 
+        log.info('Overwriting all existing articles')
+
         # 1. Delete all existing entries in collection
         self.collection.delete_many({})
         if self.collection.estimated_document_count() > 0:
@@ -59,8 +61,7 @@ class MongoAPI:
                 "error": "Could not delete existing articles, so insertion could not be done. Please try again"
             }
 
-        # 2. insert all send articles
-        log.info('Writing many articles')
+        # 2. insert all sent articles
         response = self.collection.insert_many(data)
         # convert ObjectIDs to strings
         inserted_ids = [str(entry_id) for entry_id in response.inserted_ids]
@@ -68,11 +69,11 @@ class MongoAPI:
         return {
             "status_code": HTTPStatus.OK,
             "success": len(inserted_ids) == len(data),
-            "document_IDs": inserted_ids
+            "insertedCount": len(inserted_ids)
         }
 
     def delete(self, articleID):
         log.info('Deleting one article')
         response = self.collection.delete_one({"_id": ObjectId(articleID)})
-        output = {"success": response.deleted_count == 1, "deletedCount": str(response.deleted_count)}
+        output = {"success": response.deleted_count == 1}
         return output

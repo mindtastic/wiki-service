@@ -15,7 +15,6 @@ class wikiEntry(BaseModel):
     # title must be a string with a length of 5-50 characters
     def title_validator(cls, v):
         if len(v) < 3 or len(v) > 50:
-            print("Error in title")
             raise ValueError('the title must have a length between 3 and 50')
         return v.title()
 

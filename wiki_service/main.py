@@ -52,7 +52,6 @@ async def wiki_storeArticles(JSONentries: Union[List, Dict, Any] = None):
                     "error": str(ve)}
 
     db = MongoAPI()
-    print(type(entries.get("articles")))
     response = db.write(entries.get("articles"))
     return response
 
