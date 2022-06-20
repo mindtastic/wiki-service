@@ -2,6 +2,8 @@ from pydantic import BaseModel, validator
 from typing import List
 # import datetime
 
+MAX_LENGTH_OF_TITLE = 50
+
 
 class wikiEntry(BaseModel):
     title: str
@@ -12,10 +14,10 @@ class wikiEntry(BaseModel):
     # tags: List[str]
 
     @validator('title')
-    # title must be a string with a length of 5-50 characters
+    # title must be a string with a length of 5-30 characters
     def title_validator(cls, v):
-        if len(v) < 3 or len(v) > 50:
-            raise ValueError('the title must have a length between 3 and 50')
+        if len(v) < 3 or len(v) > MAX_LENGTH_OF_TITLE:
+            raise ValueError('the title must have a length between 3 and {}'.format(MAX_LENGTH_OF_TITLE))
         return v.title()
 
     @validator('content')
