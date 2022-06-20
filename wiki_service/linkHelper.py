@@ -10,16 +10,13 @@ LEN_OF_SEARCH_SECTION = MAX_LENGTH_OF_TITLE + 7
 def createTitleToIdDict(entries: CursorType) -> Dict:
     titleToID = {}
     for article in entries:
-        print(article)
         titleToID[article.get("title")] = str(article.get("_id"))
     return titleToID
 
 
 def checkIfLinksHaveToBeAdded(paragraph: Dict) -> List:
     contentString = paragraph.get("text")
-    print(type(contentString))
     searchString = "siehe "
-    print(type(searchString))
     indexesOfOccurences = [m.start() for m in re.finditer(searchString, contentString)]
     return indexesOfOccurences
 
@@ -39,11 +36,9 @@ def addLinks(paragraph: Dict, indexesOfOccurences: List, titleToID: Dict) -> Dic
         else:
             searchSection = contentString[indexOfOccurence:len(contentString) - 1]
 
-        print(searchSection)
         indexEndOfRefArticle = searchSection.find(")")
         # shortens the searchSection ("siehe ABC-Modell). Man kann sie sich") to "ABC-Modell"
         refArticleName = searchSection[6:indexEndOfRefArticle]
-        print(refArticleName)
         refArticleID = titleToID.get(refArticleName)
         newTextKey = "text" + str(i)
         updatedParagraph[newTextKey] = contentString[progressStoredTextIndex:indexOfOccurence + 5]

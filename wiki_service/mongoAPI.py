@@ -101,7 +101,6 @@ class MongoAPI:
                         "status_code": HTTPStatus.INTERNAL_SERVER_ERROR,
                         "error": "Modified Article could not be updated in DB"
                     }
-        print(data)
 
         return {
             "status_code": HTTPStatus.OK,
