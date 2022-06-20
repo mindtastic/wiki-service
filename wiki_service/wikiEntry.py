@@ -14,7 +14,7 @@ class wikiEntry(BaseModel):
     # tags: List[str]
 
     @validator('title')
-    # title must be a string with a length of 5-30 characters
+    # title must be a string with a length of 5-50 characters
     def title_validator(cls, v):
         if len(v) < 3 or len(v) > MAX_LENGTH_OF_TITLE:
             raise ValueError('the title must have a length between 3 and {}'.format(MAX_LENGTH_OF_TITLE))
