@@ -1,10 +1,7 @@
-from typing import Dict, List
+from typing import Dict, List, Tuple
 from .wikiEntry import MAX_LENGTH_OF_TITLE
 from pymongo import CursorType
 import re
-
-# currently 57 (see validator in wikiEntry.py)
-LEN_OF_SEARCH_SECTION = MAX_LENGTH_OF_TITLE + 7
 
 
 def createTitleToIdDict(entries: CursorType) -> Dict:
@@ -14,45 +11,42 @@ def createTitleToIdDict(entries: CursorType) -> Dict:
     return titleToID
 
 
-def checkIfLinksHaveToBeAdded(paragraph: Dict) -> List:
-    contentString = paragraph.get("text")
+def searchContentForLinks(content: str) -> List[Tuple]:
+    """
+    :param content of a wiki article (str containing markdown)
+    :return: a list with tuples;
+            each tuple contains the start index and the end index
+            of the name of a referenced article in the content
+    """
     searchString = "siehe "
-    indexesOfOccurences = [m.start() for m in re.finditer(searchString, contentString)]
+    # +6 because "siehe " has 6 characters
+    startIndexes = [m.start() + 6 for m in re.finditer(searchString, content)]
+    indexesOfOccurences = []
+    for startIndex in startIndexes:
+        # reference is in the beginning/middle of the content
+        if len(content) > startIndex + MAX_LENGTH_OF_TITLE:
+            searchSection = content[startIndex:startIndex + MAX_LENGTH_OF_TITLE]
+        # reference is at the end of the content
+        else:
+            searchSection = content[startIndex:len(content)]
+
+        refArticleLength = searchSection.find(")")
+        endIndex = startIndex + refArticleLength
+        indexesOfOccurences.append(tuple((startIndex, endIndex)))
     return indexesOfOccurences
 
 
-def addLinks(paragraph: Dict, indexesOfOccurences: List, titleToID: Dict) -> Dict:
-    updatedParagraph = {}
-    contentString = paragraph.get("text")
-    # stores the point, until the original text has already been stored again
-    progressStoredTextIndex = 0
+def addLinks(content: str, indexesOfReferences: List[Tuple], titleToID: Dict) -> str:
 
-    for i, indexOfOccurence in enumerate(indexesOfOccurences):
+    for indexOfReference in indexesOfReferences:
+        startIndex, endIndex = indexOfReference
 
-        # reference is in the middle of the content
-        if len(contentString) > indexOfOccurence + LEN_OF_SEARCH_SECTION:
-            searchSection = contentString[indexOfOccurence:indexOfOccurence + LEN_OF_SEARCH_SECTION]
-        # reference is at the end of the content
-        else:
-            searchSection = contentString[indexOfOccurence:len(contentString) - 1]
-
-        indexEndOfRefArticle = searchSection.find(")")
-        # shortens the searchSection ("siehe ABC-Modell). Man kann sie sich") to "ABC-Modell"
-        refArticleName = searchSection[6:indexEndOfRefArticle]
+        # assemble link
+        refArticleName = content[startIndex:endIndex]
         refArticleID = titleToID.get(refArticleName)
-        newTextKey = "text" + str(i)
-        updatedParagraph[newTextKey] = contentString[progressStoredTextIndex:indexOfOccurence + 5]
+        markDownLink = "[{}] (kopfsachen:wiki/{})".format(refArticleName, refArticleID)
 
-        # set progress to the ")" after the article title
-        progressStoredTextIndex = indexOfOccurence + indexEndOfRefArticle
+        # replace article title with link
+        content = content[:startIndex] + markDownLink + content[endIndex:]
 
-        newLinkKey = "link" + str(i)
-        updatedParagraph[newLinkKey] = {
-            "refArticleName": refArticleName,
-            "refArticleID": refArticleID
-        }
-        if i == len(indexesOfOccurences) - 1:
-            newTextKey = "text" + str(i + 1)
-            updatedParagraph[newTextKey] = contentString[progressStoredTextIndex:len(contentString)]
-
-    return updatedParagraph
+    return content

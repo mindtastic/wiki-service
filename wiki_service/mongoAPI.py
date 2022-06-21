@@ -4,7 +4,7 @@ from urllib.parse import quote_plus
 from os import getenv
 from http import HTTPStatus
 import logging as log
-from .linkHelper import addLinks, createTitleToIdDict, checkIfLinksHaveToBeAdded
+from .linkHelper import addLinks, createTitleToIdDict, searchContentForLinks
 
 
 class MongoAPI:
@@ -67,31 +67,21 @@ class MongoAPI:
         # 3. create cross article links
         # fetch all articles from DB and create dict to get the ID by article title
         cursor = self.collection.find({})
-        if cursor.count() == 0:
-            return {
-                "status_code": HTTPStatus.INTERNAL_SERVER_ERROR,
-                "error": "Could not find any articles in DB"
-            }
         titleToID = createTitleToIdDict(cursor)
 
         # update all articles where links are intended
         for article in data:
-            articleWasUpdated = False
-            for iParagraph, paragraph in enumerate(article.get("content")):
-                # in case it is an image link
-                if "text" not in paragraph:
-                    continue
 
-                # get the indexes of the occurences of the substring "siehe " in a paragraph
-                indexesOfTitleOccurences = checkIfLinksHaveToBeAdded(paragraph)
+            # get the position of the intended references in the content
+            # e.g. [(4, 10), (20, 28)]
+            indexesOfRefOccurences = searchContentForLinks(article.get("content"))
 
-                if len(indexesOfTitleOccurences) > 0:
-                    # replace existing paragraph in the content list of an article with a new one
-                    updatedParagraph = addLinks(paragraph, indexesOfTitleOccurences, titleToID)
-                    article.get("content")[iParagraph] = updatedParagraph
-                    articleWasUpdated = True
+            if len(indexesOfRefOccurences) > 0:
 
-            if articleWasUpdated:
+                # replace the content with a linkified one
+                updatedContent = addLinks(article.get("content"), indexesOfRefOccurences, titleToID)
+                article["content"] = updatedContent
+
                 # update changed article in the DB
                 query = {"_id": ObjectId(titleToID.get(article.get("title")))}
                 newValues = {"$set": {"content": article.get("content")}}
@@ -99,7 +89,7 @@ class MongoAPI:
                 if responseUpdate.matched_count == 0:
                     return {
                         "status_code": HTTPStatus.INTERNAL_SERVER_ERROR,
-                        "error": "Modified Article could not be updated in DB"
+                        "error": "Linkified Article could not be updated in DB"
                     }
 
         return {

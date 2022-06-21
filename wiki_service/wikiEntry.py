@@ -1,5 +1,4 @@
 from pydantic import BaseModel, validator
-from typing import List
 # import datetime
 
 MAX_LENGTH_OF_TITLE = 50
@@ -7,7 +6,7 @@ MAX_LENGTH_OF_TITLE = 50
 
 class wikiEntry(BaseModel):
     title: str
-    content: List[dict]
+    content: str
 
     # TODO: add more attributes in future versions
     # date: datetime.date
@@ -24,10 +23,7 @@ class wikiEntry(BaseModel):
     # must be a string with at least 20 characters
     def content_validator(cls, v):
         if len(v) < 1:
-            raise ValueError('the content list must be longer than 0')
-        for paragraph in v:
-            if len(paragraph.get("text")) == 0:
-                raise ValueError('the content must have at least 1 character')
+            raise ValueError('the content must be longer than 0 characters')
         return v
 
     """
