@@ -83,7 +83,9 @@ class MongoAPI:
                 article["content"] = updatedContent
 
                 # update changed article in the DB
-                query = {"_id": ObjectId(titleToID.get(article.get("title")))}
+                currentArticleName = article.get("title").strip().lower()
+                currentArticleID = ObjectId(titleToID.get(currentArticleName))
+                query = {"_id": currentArticleID}
                 newValues = {"$set": {"content": article.get("content")}}
                 responseUpdate = self.collection.update_one(query, newValues)
                 if responseUpdate.matched_count == 0:

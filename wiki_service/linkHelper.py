@@ -7,7 +7,9 @@ import re
 def createTitleToIdDict(entries: CursorType) -> Dict:
     titleToID = {}
     for article in entries:
-        titleToID[article.get("title")] = str(article.get("_id"))
+        newKey = article.get("title").strip().lower()
+        titleToID[newKey] = str(article.get("_id"))
+    print(titleToID)
     return titleToID
 
 
@@ -43,10 +45,16 @@ def addLinks(content: str, indexesOfReferences: List[Tuple], titleToID: Dict) ->
 
         # assemble link
         refArticleName = content[startIndex:endIndex]
-        refArticleID = titleToID.get(refArticleName)
+        refArticleID = titleToID.get(refArticleName.strip().lower())
         markDownLink = "[{}] (kopfsachen:wiki/{})".format(refArticleName, refArticleID)
 
         # replace article title with link
         content = content[:startIndex] + markDownLink + content[endIndex:]
+        # since the link extends the content, the indexes have to be adjusted
+        for i in range(len(indexesOfReferences) - 1):
+            lenOfReference = endIndex - startIndex
+            increment = len(markDownLink) - lenOfReference
+            newIndex = tuple((indexesOfReferences[i+1][0] + increment, indexesOfReferences[i+1][1] + increment))
+            indexesOfReferences[i+1] = newIndex
 
     return content
