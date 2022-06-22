@@ -74,12 +74,12 @@ class MongoAPI:
 
             # get the position of the intended references in the content
             # e.g. [(4, 10), (20, 28)]
-            indexesOfRefOccurences = searchContentForLinks(article.get("content"))
+            indexesOfReferences = searchContentForLinks(article.get("content"))
 
-            if len(indexesOfRefOccurences) > 0:
+            if len(indexesOfReferences) > 0:
 
                 # replace the content with a linkified one
-                updatedContent = addLinks(article.get("content"), indexesOfRefOccurences, titleToID)
+                updatedContent = addLinks(article.get("content"), indexesOfReferences, titleToID)
                 article["content"] = updatedContent
 
                 # update changed article in the DB

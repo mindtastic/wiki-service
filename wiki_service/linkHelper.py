@@ -21,7 +21,7 @@ def searchContentForLinks(content: str) -> List[Tuple]:
     searchString = "siehe "
     # +6 because "siehe " has 6 characters
     startIndexes = [m.start() + 6 for m in re.finditer(searchString, content)]
-    indexesOfOccurences = []
+    indexesOfReferences = []
     for startIndex in startIndexes:
         # reference is in the beginning/middle of the content
         if len(content) > startIndex + MAX_LENGTH_OF_TITLE:
@@ -32,8 +32,8 @@ def searchContentForLinks(content: str) -> List[Tuple]:
 
         refArticleLength = searchSection.find(")")
         endIndex = startIndex + refArticleLength
-        indexesOfOccurences.append(tuple((startIndex, endIndex)))
-    return indexesOfOccurences
+        indexesOfReferences.append(tuple((startIndex, endIndex)))
+    return indexesOfReferences
 
 
 def addLinks(content: str, indexesOfReferences: List[Tuple], titleToID: Dict) -> str:
