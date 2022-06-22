@@ -4,6 +4,7 @@ from urllib.parse import quote_plus
 from os import getenv
 from http import HTTPStatus
 import logging as log
+from .linkHelper import addLinks, createTitleToIdDict, searchContentForLinks
 
 
 class MongoAPI:
@@ -62,13 +63,41 @@ class MongoAPI:
 
         # 2. insert all sent articles
         response = self.collection.insert_many(data)
-        # convert ObjectIDs to strings
-        inserted_ids = [str(entry_id) for entry_id in response.inserted_ids]
+
+        # 3. create cross article links
+        # fetch all articles from DB and create dict to get the ID by article title
+        cursor = self.collection.find({})
+        titleToID = createTitleToIdDict(cursor)
+
+        # update all articles where links are intended
+        for article in data:
+
+            # get the position of the intended references in the content
+            # e.g. [(4, 10), (20, 28)]
+            indexesOfReferences = searchContentForLinks(article.get("content"))
+
+            if len(indexesOfReferences) > 0:
+
+                # replace the content with a linkified one
+                updatedContent = addLinks(article.get("content"), indexesOfReferences, titleToID)
+                article["content"] = updatedContent
+
+                # update changed article in the DB
+                currentArticleName = article.get("title").strip().lower()
+                currentArticleID = ObjectId(titleToID.get(currentArticleName))
+                query = {"_id": currentArticleID}
+                newValues = {"$set": {"content": article.get("content")}}
+                responseUpdate = self.collection.update_one(query, newValues)
+                if responseUpdate.matched_count == 0:
+                    return {
+                        "status_code": HTTPStatus.INTERNAL_SERVER_ERROR,
+                        "error": "Linkified Article could not be updated in DB"
+                    }
 
         return {
             "status_code": HTTPStatus.OK,
-            "success": len(inserted_ids) == len(data),
-            "insertedCount": len(inserted_ids)
+            "success": len(response.inserted_ids) == len(data),
+            "insertedCount": len(response.inserted_ids)
         }
 
     def delete(self, articleID):
