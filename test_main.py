@@ -39,6 +39,13 @@ def test_root():
     assert response.json().get("status_code") == 200
 
 
+# test full text search
+def test_search():
+    response = test_client.get("search/?query=Wut+ABC")
+    assert response.json().get("status_code") == 200
+    assert response.json().get("articles") is not None
+
+
 # test get all articles endpoint
 def test_readAllArticles():
     response = test_client.get("/wiki")

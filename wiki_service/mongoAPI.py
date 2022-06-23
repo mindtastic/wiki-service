@@ -1,5 +1,8 @@
+import copyreg
+import re
+
 from bson import ObjectId
-from pymongo import MongoClient
+from pymongo import MongoClient, ASCENDING
 from urllib.parse import quote_plus
 from os import getenv
 from http import HTTPStatus
@@ -23,6 +26,7 @@ class MongoAPI:
         if collection not in db.list_collection_names():
             db.create_collection(collection)
         self.collection = db[collection]
+        #self.collection.create_index([("content", "text")])
 
     def readAll(self):
         log.info('Reading All Articles')
@@ -104,4 +108,28 @@ class MongoAPI:
         log.info('Deleting one article')
         response = self.collection.delete_one({"_id": ObjectId(articleID)})
         output = {"success": response.deleted_count == 1}
+        return output
+
+    def searchContent(self, searchString: str):
+        log.info('Searching the contents of the articles')
+
+        # converts "Wut ABC" to "Wut.*|ABC"
+        regex = searchString.replace(" ", ".*|")
+
+        cursor = self.collection.find({
+            "$or": [
+                {"title": {'$regex': regex, '$options': 'i'}},
+                {"content": {'$regex': regex, '$options': 'i'}}
+            ]
+        })
+
+        articles = []
+        for article in cursor:
+            articles.append({
+                "id": str(article["_id"]),
+                "title": article["title"],
+                "content": article["content"]
+            })
+        output = {"articles": articles}
+
         return output
