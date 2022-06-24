@@ -26,7 +26,6 @@ class MongoAPI:
         if collection not in db.list_collection_names():
             db.create_collection(collection)
         self.collection = db[collection]
-        #self.collection.create_index([("content", "text")])
 
     def readAll(self):
         log.info('Reading All Articles')
