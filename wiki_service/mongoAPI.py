@@ -105,3 +105,27 @@ class MongoAPI:
         response = self.collection.delete_one({"_id": ObjectId(articleID)})
         output = {"success": response.deleted_count == 1}
         return output
+
+    def searchContent(self, searchString: str):
+        log.info('Searching the contents of the articles')
+
+        # converts "Wut ABC" to "Wut.*|ABC"
+        regex = searchString.replace(" ", ".*|")
+
+        cursor = self.collection.find({
+            "$or": [
+                {"title": {'$regex': regex, '$options': 'i'}},
+                {"content": {'$regex': regex, '$options': 'i'}}
+            ]
+        })
+
+        articles = []
+        for article in cursor:
+            articles.append({
+                "id": str(article["_id"]),
+                "title": article["title"],
+                "content": article["content"]
+            })
+        output = {"articles": articles}
+
+        return output

@@ -17,9 +17,12 @@ async def root():
 
 
 @wiki.get('/wiki')
-async def wiki_readAllArticles():
+async def wiki_readAllArticles(query: str = None):
     db = MongoAPI()
-    response = db.readAll()
+    if query:
+        response = db.searchContent(query)
+    else:
+        response = db.readAll()
     response["status_code"] = HTTPStatus.OK
     return response
 
