@@ -1,5 +1,5 @@
 from bson import ObjectId
-from pymongo import MongoClient, ASCENDING
+from pymongo import MongoClient
 from urllib.parse import quote_plus
 from os import getenv
 from http import HTTPStatus
