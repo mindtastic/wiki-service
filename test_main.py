@@ -41,7 +41,7 @@ def test_root():
 
 # test full text search
 def test_search():
-    response = test_client.get("search/?query=Wut+ABC")
+    response = test_client.get("/wiki/?query=Wut+ABC")
     assert response.json().get("status_code") == 200
     assert response.json().get("articles") is not None
 
