@@ -1,6 +1,3 @@
-import copyreg
-import re
-
 from bson import ObjectId
 from pymongo import MongoClient, ASCENDING
 from urllib.parse import quote_plus
