@@ -16,18 +16,13 @@ async def root():
     return {"status_code": HTTPStatus.OK}
 
 
-@wiki.get('/wiki/search')
-async def wiki_fullTextSearch(query: str):
-    db = MongoAPI()
-    response = db.searchContent(query)
-    response["status_code"] = HTTPStatus.OK
-    return response
-
-
 @wiki.get('/wiki')
-async def wiki_readAllArticles():
+async def wiki_readAllArticles(query: str = None):
     db = MongoAPI()
-    response = db.readAll()
+    if query:
+        response = db.searchContent(query)
+    else:
+        response = db.readAll()
     response["status_code"] = HTTPStatus.OK
     return response
 
