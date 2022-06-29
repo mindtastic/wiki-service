@@ -5,6 +5,7 @@ from loguru import logger
 
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from wiki_service.db.migrations.migration import Migration
+from wiki_service.db.entry_repository import EntryRepository
 from wiki_service.models.wikiEntry import WikiEntry
 
 class InitialEntries(Migration):

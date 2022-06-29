@@ -1,13 +1,13 @@
 from typing import Optional, List
 from pydantic import BaseModel, Field, validator
 
-from wiki_service.models.dbmodel import TimestampsModelMixin, WikiModel
+from wiki_service.models.dbmodel import WikiModelMixin, WikiModel
 
 MAX_LENGTH_OF_TITLE = 50
 DEFAULT_ENTRIES_LIMIT = 20
 DEFAULT_ENTRIES_OFFSET = 0
 
-class WikiEntry(TimestampsModelMixin, WikiModel):
+class WikiEntry(WikiModelMixin, WikiModel):
     title: str
     content: str
 
@@ -24,8 +24,12 @@ class WikiEntry(TimestampsModelMixin, WikiModel):
             raise ValueError('the content must be longer than 0 characters')
         return v
 
+class WikiEntryInResponse(BaseModel):
+    entry: WikiEntry
+
 class ListOfWikiEntries(BaseModel):
-    entries: List[WikiEntry]
+    entry_count: int
+    entries: List[WikiEntryInResponse]
 
 class WikiEntryFilters(BaseModel):
     query: Optional[str] = None
