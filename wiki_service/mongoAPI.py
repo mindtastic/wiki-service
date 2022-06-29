@@ -15,7 +15,7 @@ class MongoAPI:
         databaseHost = getenv('MONGODB_HOST', "mymongo_wiki")
         uri = "mongodb://%s:%s@%s" % (quote_plus(user), quote_plus(password), databaseHost)
         # THIS IS JUST FOR TESTING PURPOSES
-        self.client = MongoClient("mongodb+srv://wikiTester:test123@cluster0.nsetz6j.mongodb.net/?retryWrites=true&w=majority")
+        self.client = MongoClient(uri)
         database = "mindtasticWiki"
         collection = "articles"
         db = self.client[database]
