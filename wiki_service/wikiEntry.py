@@ -20,7 +20,6 @@ class wikiEntry(BaseModel):
         return v.title()
 
     @validator('content')
-    # must be a string with at least 20 characters
     def content_validator(cls, v):
         if len(v) < 1:
             raise ValueError('the content must be longer than 0 characters')
