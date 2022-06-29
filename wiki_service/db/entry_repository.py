@@ -7,9 +7,11 @@ from wiki_service.models.wikiEntry import WikiEntry
 
 class EntryRepository(Repository):
 
+    COLLECTION_NAME = 'articles'
+
     @property
     def collection(self):
-        return 'articles'
+        return self.COLLECTION_NAME
 
     async def filter_entries(
         self, 

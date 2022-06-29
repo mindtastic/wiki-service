@@ -1,0 +1,1 @@
+from wiki_service.db.migrations import EntryFullTextSearch
