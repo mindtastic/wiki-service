@@ -15,4 +15,4 @@ COPY ["wiki_service", "/app"]
 # Exposing an internal port
 EXPOSE 5001
 
-CMD [ "uvicorn", "wiki_service.main:wiki", "--host", "0.0.0.0", "--port", "5001"]
+CMD [ "uvicorn", "wiki_service.main:wiki_service", "--host", "0.0.0.0", "--port", "5001"]

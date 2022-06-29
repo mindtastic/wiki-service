@@ -12,7 +12,7 @@ async def connect_to_mongo(app: FastAPI, settings: Settings):
         app.state.mongo = AsyncIOMotorClient(
             settings.mongo_host, username=settings.mongo_user, password=settings.mongo_password, authMechanism='SCRAM-SHA-256'
         )
-        app.state.db = mongo[settings.mongo_database]
+        app.state.db = app.state.mongo[settings.mongo_database]
     except ConnectionFailure as e:
         logger.exception('Error connecting to MongoDB: %s' % e)
 

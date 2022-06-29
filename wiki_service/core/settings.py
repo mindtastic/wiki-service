@@ -12,7 +12,7 @@ from wiki_service.core.logging import InterceptHandler
 class Settings(BaseSettings):
     title: str = 'Kopfsachen Wiki'
     debug: bool = False
-    allowedHost: str = CommaSeparatedStrings(os.getenv('ALLOWED_HOSTS', ''))
+    allowedHost: CommaSeparatedStrings = CommaSeparatedStrings(os.getenv('ALLOWED_HOSTS', ''))
 
     mongo_user: str = os.getenv('MONGODB_USER', "admin")
     mongo_password: str = os.getenv('MONGODB_PASSWORD', '')

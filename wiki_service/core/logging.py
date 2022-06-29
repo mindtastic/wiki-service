@@ -12,7 +12,7 @@ class InterceptHandler(logging.Handler):
             level = str(record.levelno)
 
         # Enhance logging with caller information
-        frame, depth = logging.currentframe, 2
+        frame, depth = logging.currentframe(), 2
         while frame.f_code.co_filename == logging.__file__:
             frame = cast(FrameType, frame.f_back)
             depth += 1
