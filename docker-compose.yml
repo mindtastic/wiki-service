@@ -1,22 +1,23 @@
 version: "3"
 services: 
-    mongo_wiki:
-        image: "mongo"
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: admin
-            MONGO_INITDB_ROOT_PASSWORD: test123
-            MONGO_INITDB_DATABASE: mindtasticWiki
-
-    wiki_service:
-        build: .
-        environment:
-            MONGODB_HOST: mongo_wiki
-            MONGODB_USER: admin
-            MONGODB_PASSWORD: test123
-            MONGODB_DB: mindtasticWiki
-        volumes:
-          - .:/app
-        depends_on: 
-            - mymongo_wiki
-        ports:
-            - "5001:5001"
+  mongo_wiki:
+    image: "mongo"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: test123
+      MONGO_INITDB_DATABASE: mindtasticWiki
+  wiki_service:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      MONGODB_HOST: mongo_wiki
+      MONGODB_USER: admin
+      MONGODB_PASSWORD: test123
+      MONGODB_DB: mindtasticWiki
+    volumes:
+      - .:/app
+    depends_on: 
+      - mymongo_wiki
+    ports:
+      - "5001:5001"

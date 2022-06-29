@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from typing import Optional
 
-from pydantic import BaseConfig, BaseModel, validator
+from pydantic import BaseConfig, BaseModel, Field, validator
 
 class WikiModel(BaseModel):
     class Config(BaseConfig):
