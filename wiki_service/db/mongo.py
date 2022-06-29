@@ -13,7 +13,7 @@ async def connect_to_mongo(app: FastAPI, settings: Settings):
             settings.mongo_host, username=settings.mongo_user, password=settings.mongo_password, authMechanism='SCRAM-SHA-256'
         )
 
-        # Send a cheap command to mongo to test availability
+        # Check if articles collection exists
         await mongo.admin.command('ismaster')
 
         app.state.mongo = mongo
