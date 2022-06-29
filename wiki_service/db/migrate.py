@@ -36,7 +36,6 @@ class MongoMigrator:
     def get_sorted_migrations(self) -> List[Migration]:
         logger.debug('Collecting migrations from module...')
 
-
         migrations: List[Migration] = []
         for migration_name in dir(wiki_service.db.migrations):
             attr = getattr(wiki_service.db.migrations, migration_name)
@@ -44,5 +43,5 @@ class MongoMigrator:
             if isclass(attr) and issubclass(attr, Migration) and not attr.is_abstract():
                 migrations.append(attr())
 
-        return sorted(migrations, key=lambda x: x.timestamp)
+        return sorted(migrations, key=lambda x: x.timestamp())
     

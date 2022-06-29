@@ -1,5 +1,6 @@
 import pymongo
 from wiki_service.db.repository import Repository
+from loguru import logger
 
 class MigrationRepository(Repository):
 
@@ -17,7 +18,8 @@ class MigrationRepository(Repository):
             sort=[('batch', pymongo.ASCENDING), ('migration', pymongo.ASCENDING)]
         ).to_list(None)
 
-        return list(map(lambda r: r.migration, ran))
+        logger.debug('Executed migrations: {}', ran)
+        return list(map(lambda r: r['migration'], ran))
 
     async def migrations_by_batch(self, batch: int):
         return await self.col.find(
@@ -30,13 +32,14 @@ class MigrationRepository(Repository):
         if last_run is None:
             return 0
 
-        return last_run.batch
+        return last_run['batch']
     
     async def next_batch_number(self):
         last = await self.last_batch_number()
         return last + 1
 
     async def log(self, migration: str, batch: int):
+        log = { 'migration': migration, 'batch': int}
         await self.col.insert_one({
             'migration': migration,
             'batch': batch,

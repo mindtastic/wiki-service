@@ -10,7 +10,7 @@ class Migration(ABC):
         
     @property
     def name(self) -> str:
-        type(self).__name__
+        return self.__class__.__name__
 
     @abstractmethod
     async def migrate(self, db: AsyncIOMotorDatabase) -> None:

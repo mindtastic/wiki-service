@@ -28,9 +28,6 @@ class EntryRepository(Repository):
         rows = self.col.find(filter, limit=limit, skip=offset)
 
         async for row in rows:
-            entries.append(WikiEntry(
-                **row,
-                created_at=ObjectId(row["_id"]).generation_time,
-            ))
+            entries.append(WikiEntry(**row))
 
         return entries

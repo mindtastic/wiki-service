@@ -4,8 +4,8 @@ from wiki_service.db.migrations.migration import Migration
 
 class EntryFullTextSearch(Migration):
 
-    def timestamp() -> datetime:
-        datetime.isoformat('2022-06-29T12:40:00')
+    def timestamp(self) -> datetime:
+        return datetime.fromisoformat('2022-06-29T12:40:00')
 
     async def migrate(self, db: AsyncIOMotorDatabase) -> None:
         # Create full text search index
