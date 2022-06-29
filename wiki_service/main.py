@@ -6,6 +6,7 @@ from wiki_service.core.events import create_shutdown_handler, create_startup_han
 
 from wiki_service.errors.http_error import http_error_handler
 from wiki_service.errors.validation_error import http_request_validation_error_handler
+from wiki_service.routes.api import router as api_router
 
 from wiki_service.core.settings import Settings
 
@@ -28,6 +29,8 @@ def create_wiki_service() -> FastAPI:
 
     app.add_exception_handler(HTTPException, http_error_handler)
     app.add_exception_handler(RequestValidationError, http_request_validation_error_handler)
+
+    app.include_router(api_router, prefix=settings.api_prefix)
 
     return app
 

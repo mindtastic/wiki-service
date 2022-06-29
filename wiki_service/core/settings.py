@@ -14,9 +14,11 @@ class Settings(BaseSettings):
     debug: bool = False
     allowedHost: CommaSeparatedStrings = CommaSeparatedStrings(os.getenv('ALLOWED_HOSTS', ''))
 
+    api_prefix: str = ''
+
     mongo_user: str = os.getenv('MONGODB_USER', "admin")
     mongo_password: str = os.getenv('MONGODB_PASSWORD', '')
-    mongo_host: str = os.getenv('MONGODB_HOST', 'mymongo_wiki')
+    mongo_host: str = os.getenv('MONGODB_HOST', 'mongo_wiki')
     mongo_database: str = os.getenv('MONGODB_DB', 'mindtasticWiki')
 
     log_level: int = logging.INFO
