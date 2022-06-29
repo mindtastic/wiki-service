@@ -10,9 +10,9 @@ test_client = TestClient(wiki)
 # inserting articles that will be validated successfully
 def test_insertValidArticles():
     response = test_client.post("/wiki", json.dumps(ARTICLES_VALID, default=str))
-    assert response.json().get("status_code") == 200
+    assert response.json().get("status_code") == 201
     assert response.json().get("success")
-    assert len(response.json().get("document_IDs")) == 2
+    assert response.json().get("insertedCount") == 2
 
 
 # inserting articles that will NOT be validated successfully
@@ -71,4 +71,3 @@ def test_deleteOneArticle():
     response = test_client.delete("/wiki/{}".format(article_id))
     assert response.json().get("status_code") == 200
     assert response.json().get("success")
-    assert int(response.json().get("deletedCount")) == 1

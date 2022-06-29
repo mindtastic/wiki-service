@@ -62,5 +62,5 @@ async def wiki_storeArticles(JSONentries: Union[List, Dict, Any] = None):
 async def wiki_deleteArticle(articleID):
     db = MongoAPI()
     response = db.delete(articleID)
-    response["status_code"] = HTTPStatus.OK
+    response["status_code"] = HTTPStatus.OK if response.get("success") else HTTPStatus.INTERNAL_SERVER_ERROR
     return response

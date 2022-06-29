@@ -24,3 +24,9 @@ For local development, a docker-compose.yml is provided. The project folder will
 ```
 docker-compose up 
 ```
+
+
+# Test the endpoints:
+To test the endpoints, run the following command in the root directory (After installing pytest):
+
+    pytest

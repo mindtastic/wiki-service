@@ -15,7 +15,7 @@ class MongoAPI:
         databaseHost = getenv('MONGODB_HOST', "mymongo_wiki")
         uri = "mongodb://%s:%s@%s" % (quote_plus(user), quote_plus(password), databaseHost)
         # THIS IS JUST FOR TESTING PURPOSES
-        self.client = MongoClient(uri)
+        self.client = MongoClient("mongodb+srv://wikiTester:test123@cluster0.nsetz6j.mongodb.net/?retryWrites=true&w=majority")
         database = "mindtasticWiki"
         collection = "articles"
         db = self.client[database]
@@ -95,7 +95,7 @@ class MongoAPI:
                     }
 
         return {
-            "status_code": HTTPStatus.OK,
+            "status_code": HTTPStatus.CREATED,
             "success": len(response.inserted_ids) == len(data),
             "insertedCount": len(response.inserted_ids)
         }
