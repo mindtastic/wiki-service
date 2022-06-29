@@ -1,0 +1,15 @@
+---
+title: ALPEN-Methode
+---
+
+Die ALPEN-Methode gibt dir eine Struktur um einen Tagesplan zu erstellen, wenn du einmal das Gefühl hast, dass du gar nicht mehr weißt wo du anfangen sollst. Das Wort ALPEN sind dabei die Anfangsbuchstaben der einzelnen Schritte, die du nach und nach durch gehst.
+
+Das „A“ steht für „Aufgaben notieren“: Dabei schreibst du dir auf, was du dir an diesem oder am nächsten Tag vornimmst. Die Aufgaben können sowohl Schulaufgaben als auch Hobbies oder andere Dinge sein, die du machen möchtest. Weiterhin priorisierst du deine zuvor aufgeschriebenen Aufgaben. Was ist wichtig und was ist eher unwichtig?
+
+Im nächsten Schritt, dem „L“ schätzt du die Länge der einzelnen Aufgaben ein: Wie lange brauche ich für jede einzelne Aufgabe? Wann muss ich damit fertig sein?
+
+Das „P“ steht für „Pufferzeiten einplanen“: Dieser nächste Schritt ist wichtig, weil die geschätzte Länge nie ganz genau stimmt und du dir deshalb gleich schon einen Zeitpuffer einplanen solltest. Als Faustregel kannst du dir merken, dass du dir etwa ein Drittel des geschätzten Zeitaufwandes für eine Aufgabe noch zusätzlich als Reserve einplanen solltest.
+
+Nun heißt es „Entscheidungen zu treffen“: Dies ist der Schritt „E“ in der ALPEN-Methode. Entscheide dich welche Aufgabe du zuerst erledigen möchtest. Du solltest mit der wichtigsten beziehungsweise dringendsten Aufgabe beginnen und dann mit der Zweitwichtigsten fortfahren und so weiter! Es kann an einigen Tagen auch vorkommen, dass du nicht alle Aufgaben schaffst. Das ist vollkommen okay und passiert auch den strukturiertesten Menschen einmal. Durch den Schritt „Entscheidungen treffen“ hast du aber selbst in diesem Falle die wichtigsten Dinge gleich als erstes abgearbeitet. Die weniger wichtigen Aufgaben, können dann auch bis morgen warten.
+
+Der letzte Schritt „N“ ist die „Nachkontrolle”: Das heißt am Ende des Tages kontrollierst du welche Aufgaben du geschafft hast und welche noch anstehen. Dies ist ein guter Zeitpunkt dir gleich Aufgaben für den nächsten Tag zu notieren und somit die ALPEN-Methode von vorne zu beginnen.
