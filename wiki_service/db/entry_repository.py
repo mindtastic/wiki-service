@@ -1,6 +1,4 @@
 from typing import List, Optional
-
-from bson import ObjectId
 from wiki_service.db.repository import Repository
 
 from wiki_service.models.wikiEntry import WikiEntry
