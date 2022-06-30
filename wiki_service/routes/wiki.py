@@ -1,5 +1,5 @@
 from http.client import HTTPException
-from fastapi import APIRouter, Body, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException, Response
 from loguru import logger
 
 from starlette import status
@@ -7,7 +7,7 @@ from starlette import status
 from wiki_service.db.entry_repository import EntryRepository
 from wiki_service.models.wikiEntry import ListOfWikiEntries, WikiEntry, WikiEntryResponse, WikiEntryFilters
 from wiki_service.services.wikiEntries import check_wiki_entry_exists
-from wiki_service.routes.dependencies import get_repository, get_wiki_entry_filters
+from wiki_service.routes.dependencies import get_repository, get_wiki_entry_filters, get_entry_by_id_from_path
 
 
 router = APIRouter()
@@ -48,3 +48,14 @@ async def create_new_article(
     entry = await repo.create_entry(new_entry)
     return WikiEntryResponse(**entry.dict())
 
+@adminRouter.delete(
+    "/{id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    name='wiki:delete-entry',
+    response_class=Response
+)
+async def remove_wiki_article(
+    entry: WikiEntry = Depends(get_entry_by_id_from_path),
+    repo: EntryRepository = Depends(get_repository(EntryRepository))
+) -> None:
+    await repo.delete_entry(entry)

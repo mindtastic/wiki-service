@@ -1,11 +1,15 @@
 from typing import AsyncGenerator, Callable, Type, Union
-from fastapi import Depends, Query
+from fastapi import Depends, HTTPException, Query, Path
+from starlette import status
 from starlette.requests import Request
+from wiki_service.db.entry_repository import EntryRepository
+from wiki_service.db.errors import EntityDoesNotExist
 from wiki_service.db.repository import Repository
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from wiki_service.models.wikiEntry import (
     DEFAULT_ENTRIES_LIMIT, 
     DEFAULT_ENTRIES_OFFSET,
+    WikiEntry,
     WikiEntryFilters
 )
 
@@ -28,3 +32,15 @@ def get_wiki_entry_filters(
         limit=limit,
         offset=offset
     )
+
+async def get_entry_by_id_from_path(
+    id: str = Path(..., min_length=1),
+    repo: EntryRepository = Depends(get_repository(EntryRepository))
+) -> WikiEntry:
+    try:
+        return await repo.get_entry_by_id(id)
+    except EntityDoesNotExist:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='wiki_entry does not existss'
+        )
