@@ -19,7 +19,7 @@ async def connect_to_mongo(app: FastAPI, settings: Settings):
         await mongo.admin.command('ismaster')
 
         app.state.mongo = mongo
-        app.state.db = app.state.mongo[settings.mongo_database]
+        app.state.db = app.state.mongo[settings.mongo_connection.database]
     except (AutoReconnect, ConnectionFailure) as e:
         logger.exception('Error connecting to MongoDB: %s' % e)
 
