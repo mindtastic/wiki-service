@@ -10,9 +10,6 @@ COPY /requirements.txt /app
 RUN pip3 install -r requirements.txt
 RUN pip3 install uvicorn
 
-COPY ["wiki_service", "/app"]
+COPY wiki_service /app/wiki_service
 
-# Exposing an internal port
-EXPOSE 5001
-
-CMD [ "uvicorn", "wiki_service.main:wiki_service", "--host", "0.0.0.0", "--port", "5001", "--proxy-headers"]
+CMD [ "python", "-m", "wiki_service.main" ]
