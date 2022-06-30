@@ -11,7 +11,8 @@ async def connect_to_mongo(app: FastAPI, settings: Settings):
     
     try:
         mongo = AsyncIOMotorClient(
-            settings.mongo_host, username=settings.mongo_user, password=settings.mongo_password, authMechanism='SCRAM-SHA-256'
+            settings.db_connection_string(),
+            authMechanism='SCRAM-SHA-256'
         )
 
         # Check if articles collection exists

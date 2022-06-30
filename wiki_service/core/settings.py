@@ -3,9 +3,10 @@ import sys
 import logging
 from loguru import logger
 from pydantic import BaseSettings
-from typing import Tuple
-from starlette.datastructures import CommaSeparatedStrings
+from typing import Optional, Tuple
+from urllib.parse import quote_plus
 
+from starlette.datastructures import CommaSeparatedStrings
 from wiki_service.core.logging import InterceptHandler
 
 
@@ -15,7 +16,8 @@ class Settings(BaseSettings):
     allowedHost: CommaSeparatedStrings = CommaSeparatedStrings(os.getenv('ALLOWED_HOSTS', ''))
 
     api_prefix: str = ''
-
+    
+    mongo_con_str: Optional[str] = os.getenv('CONNECTION_STRING', None)
     mongo_user: str = os.getenv('MONGODB_USER', "admin")
     mongo_password: str = os.getenv('MONGODB_PASSWORD', '')
     mongo_host: str = os.getenv('MONGODB_HOST', 'mongo_wiki')
@@ -29,3 +31,14 @@ class Settings(BaseSettings):
         for logger_name in self.loggers:
             logging.getLogger(logger_name).handlers = [InterceptHandler(level=self.log_level)]
         logger.configure(handlers=[{"sink": sys.stderr, "level": self.log_level}])
+
+    def db_connection_string(self) -> str:
+        connection_string = self.mongo_con_str
+        if connection_string is None:
+            connection_string = "mongodb://%s:%s@%s" % (
+                quote_plus(self.mongo_user),
+                quote_plus(self.mongo_password),
+                quote_plus(self.mongo_host)
+            )
+
+        return connection_string
