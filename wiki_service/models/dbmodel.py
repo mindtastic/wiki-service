@@ -41,5 +41,3 @@ class TimestampsModelMixin(BaseModel):
 
 class WikiModelMixin(TimestampsModelMixin):
     id: Optional[MongoOID] = Field(None, alias="_id")
-    class Config(BaseConfig):
-        fields = {'id': '_id'}

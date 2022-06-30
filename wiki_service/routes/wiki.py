@@ -5,7 +5,7 @@ from loguru import logger
 from starlette import status
 
 from wiki_service.db.entry_repository import EntryRepository
-from wiki_service.models.wikiEntry import ListOfWikiEntries, WikiEntry, WikiEntryInResponse, WikiEntryFilters
+from wiki_service.models.wikiEntry import ListOfWikiEntries, WikiEntry, WikiEntryResponse, WikiEntryFilters
 from wiki_service.services.wikiEntries import check_wiki_entry_exists
 from wiki_service.routes.dependencies import get_repository, get_wiki_entry_filters
 
@@ -25,7 +25,7 @@ async def list_wiki_articles(
         offset=filters.offset)   
 
     entries_in_response = [
-        WikiEntryInResponse(entry=entry) for entry in entries
+        WikiEntryResponse(**entry.dict()) for entry in entries
     ]
 
     return ListOfWikiEntries(
@@ -38,7 +38,7 @@ adminRouter = APIRouter()
 async def create_new_article(
     new_entry: WikiEntry = Body(..., embed=True, alias="entry"),
     repo: EntryRepository = Depends(get_repository(EntryRepository))
-) -> WikiEntryInResponse:
+) -> WikiEntryResponse:
     if await check_wiki_entry_exists(repo, new_entry.title):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -46,5 +46,5 @@ async def create_new_article(
         )
     
     entry = await repo.create_entry(new_entry)
-    return WikiEntryInResponse(entry=entry)
+    return WikiEntryResponse(entry=entry)
 

@@ -24,12 +24,17 @@ class WikiEntry(WikiModelMixin, WikiModel):
             raise ValueError('the content must be longer than 0 characters')
         return v
 
-class WikiEntryInResponse(BaseModel):
-    entry: WikiEntry
+class WikiEntryResponse(WikiEntry):
+    class Config:
+        fields = {'id': 'id'}
+    
+    def __init__(self, **pydict):
+        super(WikiEntryResponse, self).__init__(**pydict)
+        self.id = pydict.get('id')
 
 class ListOfWikiEntries(BaseModel):
     entry_count: int
-    entries: List[WikiEntryInResponse]
+    entries: List[WikiEntryResponse]
 
 class WikiEntryFilters(BaseModel):
     query: Optional[str] = None
