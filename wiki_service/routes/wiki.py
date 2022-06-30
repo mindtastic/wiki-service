@@ -46,5 +46,5 @@ async def create_new_article(
         )
     
     entry = await repo.create_entry(new_entry)
-    return WikiEntryResponse(entry=entry)
+    return WikiEntryResponse(**entry.dict())
 

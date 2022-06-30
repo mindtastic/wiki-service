@@ -31,7 +31,7 @@ class EntryRepository(Repository):
         return entries
 
     async def get_entry_by_title(self, title: str) -> WikiEntry:
-        wiki_entry = self.col.find_one({'title': title})
+        wiki_entry = await self.col.find_one({'title': title})
         if wiki_entry is None:
             raise EntityDoesNotExist('WikiEntry with title "{0}" does not exists'.format(title))
 
@@ -40,7 +40,7 @@ class EntryRepository(Repository):
     async def create_entry(self, entry: WikiEntry) -> WikiEntry:
         entry_dict = entry.dict()
         entry_dict['updated_at'] = datetime.now()
-        created_entry = await self.col.insert_one(entry_dict)
+        db_response = await self.col.insert_one(entry_dict)    
 
-        return WikiEntry(**created_entry)
+        return entry.copy(update={'id': db_response.inserted_id})
     
