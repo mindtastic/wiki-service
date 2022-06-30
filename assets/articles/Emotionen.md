@@ -1,0 +1,5 @@
+---
+title: Emotion
+---
+
+Unterschiedliche Emotionen wie Wut, Angst, Freude, Trauer oder Überraschung entstehen in Reaktion auf verschiedene auslösende Situationen und wie wir diese Situationen bewerten (siehe ABC-Modell). Man kann sie sich als vorbereitete Antwort-Tendenzen vorstellen, die uns im Laufe der Evolution geholfen haben rasch und möglichst adaptiv auf wichtige Chancen und Herausforderungen in unserer Umwelt zu reagieren: Beispielsweise indem unser Körper und Gehirn automatisch das Emotions-Programm ‚Angst‘ abruft, welches uns fluchtbereit macht, ohne dass wir dafür groß nachdenken müssten.. Jede Emotion besteht dabei aus vier miteinander in Wechselwirkung stehenden Elementen: Der die Emotion begleitenden Körperreaktion (1), den damit einhergehenden Gedanken (2), dem dazugehörigen Gefühl (3) und daran anschließendes Verhalten (4). Wenn man also eine Emotion beeinflussen will (siehe Emotionsregulation), um zum Beispiel einer negativen Emotion entgegenzuwirken, kann man an diesen vier Stellschrauben ansetzen.

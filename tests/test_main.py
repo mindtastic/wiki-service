@@ -1,5 +1,5 @@
 import json
-from wiki_service.main import wiki
+from wiki_service.main_old import wiki
 from fastapi.testclient import TestClient
 from testData import ARTICLES_VALID, ARTICLES_INVALID_V1, ARTICLES_INVALID_V2
 
