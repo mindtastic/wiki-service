@@ -36,7 +36,7 @@ class EntryRepository(Repository):
     async def get_entry_by_title(self, title: str) -> WikiEntry:
         wiki_entry = await self.col.find_one({'title': title})
         if wiki_entry is None:
-            raise EntityDoesNotExist('WikiEntry with title "{0}" does not exists'.format(title))
+            raise EntityDoesNotExist('WikiEntry with title {} does not exists'.format(title))
 
         return WikiEntry(**wiki_entry)
     
@@ -44,7 +44,7 @@ class EntryRepository(Repository):
         wiki_entry = await self.col.find_one({'_id': ObjectId(id)})
         logger.debug('get_entry_by_id got for id {} entity: {}', id, wiki_entry)
         if wiki_entry is None:
-            raise EntityDoesNotExist('WikiEntry with id "{0} does not exists'.format(id))
+            raise EntityDoesNotExist('WikiEntry with id {} does not exists'.format(id))
 
         return WikiEntry(**wiki_entry)
 

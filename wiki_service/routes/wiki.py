@@ -42,7 +42,7 @@ async def create_new_article(
     if await check_wiki_entry_exists(repo, new_entry.title):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail='wiki entry with title {0} already exists'.format(new_entry.title)
+            detail='wiki entry with title {} already exists'.format(new_entry.title)
         )
     
     entry = await repo.create_entry(new_entry)

@@ -23,7 +23,7 @@ class MongoMigrator:
 
         batch = await self.repository.next_batch_number()
         for migration in pending:
-            logger.info('Running migration {}', migration.name)
+            logger.info('Running migration {}'.format(migration.name))
             await migration.migrate(self.db)
             await self.repository.log(migration.name, batch)
 
